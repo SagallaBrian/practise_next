@@ -1,9 +1,8 @@
+import { QueryClient } from "@tanstack/react-query";
 import axios, { CreateAxiosDefaults } from "axios";
-const url = process.env.API_BASE_URL;
-console.log(url, "test");
 
 const DEFAULT_API_CONFIG: CreateAxiosDefaults = {
-  baseURL: "https://api.dev.msq.market",
+  baseURL: process.env.API_BASE_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -44,4 +43,6 @@ axiosInstance.interceptors.response.use(
 
 axiosInstance.defaults.data = {};
 
-export { axiosInstance };
+const myQueryClient = new QueryClient();
+
+export { axiosInstance, myQueryClient };
