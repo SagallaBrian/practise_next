@@ -10,8 +10,6 @@ const inter = Inter({
 function AppLayout({ children }: { children: ReactNode }) {
   const { user } = useAuth();
 
-  console.log(user);
-
   return (
     <div className={`${inter.className} h-screen container-fluid`}>
       {user && user.email ? (

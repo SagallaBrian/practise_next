@@ -43,6 +43,8 @@ axiosInstance.interceptors.response.use(
 
 axiosInstance.defaults.data = {};
 
-const myQueryClient = new QueryClient();
+const myQueryClient = new QueryClient({
+  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+});
 
 export { axiosInstance, myQueryClient };
