@@ -1,13 +1,13 @@
 import { axiosInstance } from "@/api/api";
 import { API_URL } from "@/api/url";
-import { userForm } from "@/models/user";
+import { UserSignInRsq, UserSignUpRsq } from "@/models/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const useLoginUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (userData: userForm) => {
+    mutationFn: async (userData: UserSignInRsq) => {
       const { email, password } = userData;
       const response = await axiosInstance.post(API_URL.signIn, {
         email,
@@ -31,4 +31,20 @@ const useGetUser = (isValidToken: boolean) => {
   });
 };
 
-export { useGetUser, useLoginUser };
+const useRegisterUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userData: UserSignUpRsq) => {
+      const response = await axiosInstance.post(API_URL.signUp, userData);
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+    },
+  });
+};
+
+export { useGetUser, useLoginUser, useRegisterUser };

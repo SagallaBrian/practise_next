@@ -2,3 +2,36 @@ export interface userForm {
   email: string;
   password: string;
 }
+export interface UserSignUpResp {
+  status: string;
+  data: {
+    email: string;
+    name: string;
+    phone_number: string;
+    token: string;
+    role: number;
+  };
+}
+export interface UserSignUpRsq {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phoneNumber?: string;
+}
+
+export interface UserSignInResp {
+  status: string;
+  data: {
+    avatar: string;
+    email: string;
+    name: string;
+    phone_number: string;
+    role: number;
+    token: string;
+  };
+}
+export interface UserSignInRsq {
+  email: string;
+  password: string;
+}

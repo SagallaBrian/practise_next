@@ -47,7 +47,7 @@ export const AuthProvider = (props: { children: ReactNode }) => {
 
     if (!isTokenValid) {
       setUser(null);
-      router.replace("/login");
+      router.replace("/auth/login");
     }
   }, []);
 

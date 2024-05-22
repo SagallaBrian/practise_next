@@ -1,8 +1,10 @@
 export const API_URL = {
-  signIn: "platform-users/msq_platform_users_login",
+  signIn: "api/v1/auth/msq_platform_users_login",
+  signUp: "api/v1/auth/msq_platform_users_register",
+  // signIn: "platform-users/msq_platform_users_login",
+  // signUp: "platform-users/msq_platform_users_register",
   resendOTP: "/platform-users/send_OTP",
   verifyOTP: "/platform-users/verify_OTP",
-  signUp: "platform-users/msq_platform_users_register",
   verifyAccount: "platform-users/msq_platform_verify_account",
   resetPwdRequest: "platform-users/msq_platform_reset_password_request",
   resetPwd: "platform-users/msq_platform_reset_password",

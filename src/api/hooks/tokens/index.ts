@@ -1,6 +1,11 @@
 import { axiosInstance } from "@/api/api";
 import { API_URL } from "@/api/url";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { GetAllTokensResp, tokenSearchInput } from "./types";
 
 // For Sever side paginatio
@@ -32,4 +37,24 @@ const useGetTokensScroll = () => {
   });
 };
 
-export { useGetAllTokens, useGetTokensScroll };
+const useAddTokens = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (tokenData: FormData) => {
+      const response = await axiosInstance.post(API_URL.addTokens, tokenData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: ["tokensInfinite"],
+      });
+    },
+  });
+};
+
+export { useGetAllTokens, useGetTokensScroll, useAddTokens };

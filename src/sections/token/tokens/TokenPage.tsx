@@ -9,24 +9,17 @@ import {
 } from "@mui/x-data-grid-pro";
 
 import { useGetTokensScroll } from "@/api/hooks/tokens";
-import { Avatar, Button, Typography } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
-import { jsonToExcel } from "@/common/utils/excelutil";
 import { AddToken } from "./AddToken";
 
 function TokenPage() {
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 5,
-    page: 0,
-  });
-
   const [rowSelectionModel, setRowSelectionModel] =
     useState<GridRowSelectionModel>([]);
 
   const [queryOptions, setQueryOptions] = useState({});
 
   const onFilterChange = useCallback((filterModel: GridFilterModel) => {
-    console.log(filterModel);
     setQueryOptions({ filterModel: { ...filterModel } });
   }, []);
 
@@ -143,49 +136,6 @@ function TokenPage() {
     <div className=" p-2 overflow-scroll">
       <h4>Tokens user</h4>
       <div className="py-3">
-        {/* <Button
-          variant="contained"
-          onClick={() =>
-            jsonToExcel(
-              data
-                ? data.pages
-                    .flatMap((page) => page.allTokensData)
-                    .map(
-                      ({
-                        name,
-                        address,
-                        total_tokens,
-                        onChain,
-                        swappable,
-                        updatedAt,
-                        createdAt,
-                      }) => ({
-                        name,
-                        address,
-                        total_tokens,
-                        onChain,
-                        swappable,
-                        updatedAt,
-                        createdAt,
-                      })
-                    )
-                : [],
-              [
-                "Name",
-                "Address",
-                "Total Tokens",
-                "Is Onchain",
-                "Is Swappable",
-                "Updated At",
-                "Created Ats",
-              ],
-              "Tokens Page"
-            )
-          }
-        >
-          Download
-        </Button> */}
-
         <AddToken />
       </div>
       <Box sx={{ height: 400, width: "100%" }}>

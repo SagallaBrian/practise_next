@@ -75,4 +75,50 @@ const excelToJson = (jsData: any) => {
   writeFile(wb, "SheetJSReactAoO.xlsx");
 };
 
-export { jsonToExcel, excelToJson };
+export {
+  jsonToExcel,
+  excelToJson,
+
+  /* <Button
+          variant="contained"
+          onClick={() =>
+            jsonToExcel(
+              data
+                ? data.pages
+                    .flatMap((page) => page.allTokensData)
+                    .map(
+                      ({
+                        name,
+                        address,
+                        total_tokens,
+                        onChain,
+                        swappable,
+                        updatedAt,
+                        createdAt,
+                      }) => ({
+                        name,
+                        address,
+                        total_tokens,
+                        onChain,
+                        swappable,
+                        updatedAt,
+                        createdAt,
+                      })
+                    )
+                : [],
+              [
+                "Name",
+                "Address",
+                "Total Tokens",
+                "Is Onchain",
+                "Is Swappable",
+                "Updated At",
+                "Created Ats",
+              ],
+              "Tokens Page"
+            )
+          }
+        >
+          Download
+        </Button> */
+};
