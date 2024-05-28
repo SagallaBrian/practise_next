@@ -1,6 +1,8 @@
 import { useGetUser, useLoginUser } from "@/api/hooks/users";
-import { DefaultProviderType, UserType } from "@/common/types/authcontext";
+import { DefaultProviderType } from "@/common/types/authcontext";
+import { UserType } from "@/models/user";
 import { useRouter } from "next/router";
+
 import {
   ReactNode,
   createContext,
@@ -10,17 +12,22 @@ import {
 } from "react";
 
 const defaultAuthProvider: DefaultProviderType = {
+  isAuthenticated: false,
   user: null,
+  isLoadingUser: false,
+  isLoginLoading: false,
+  isloadingPending: true,
   login: async (email: string, password: string) => {},
   logout: async () => {},
 };
 
 const AuthContext = createContext(defaultAuthProvider);
 
-export const AuthProvider = (props: { children: ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [user, setUser] = useState<UserType | null>(null);
   const [isTokenValid, setIsTokenValid] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const parseJwt = (token: string) => {
     if (token) {
@@ -45,33 +52,52 @@ export const AuthProvider = (props: { children: ReactNode }) => {
     const isTokenValid = !!decodedJwt && decodedJwt?.exp * 1000 > Date.now();
     setIsTokenValid(isTokenValid);
 
-    if (!isTokenValid) {
+    if (!isTokenValid && !router.pathname.startsWith("/auth")) {
       setUser(null);
       router.replace("/auth/login");
     }
   }, []);
 
-  const { data, isLoading } = useGetUser(isTokenValid);
+  const {
+    data,
+    isLoading: isLoadingUser,
+    isPending: isloadingPending,
+  } = useGetUser(isTokenValid);
 
-  const { mutateAsync: loginUser } = useLoginUser();
+  const {
+    mutateAsync: loginUser,
+    isPending: isLoginLoading,
+    data: loginData,
+  } = useLoginUser();
 
   const login = async (email: string, password: string) => {
-    const res = await loginUser({ email, password });
-    if (res.status) {
-      localStorage.setItem("token", res.data.token);
+    try {
+      const res = await loginUser({ email, password });
+      if (res.status) {
+        localStorage.setItem("token", res.token);
+        setUser(res.data);
+        setIsTokenValid(true);
 
-      setTimeout(() => {
         router.push("/dashboard");
-      }, 10);
+
+        // setTimeout(() => {
+        // }, 10);
+      } else {
+        setLoginError("Failed to login. Please try again.");
+      }
+    } catch (err) {
+      setLoginError("An unexpected error occurred. Please try again.");
     }
   };
 
   const logout = async () => {
     setUser(null);
     setIsTokenValid(false);
+    localStorage.removeItem("token");
+    router.replace(`/auth/login?returnUrl=${router.asPath}`);
   };
 
-  if (isLoading) {
+  if (isLoadingUser) {
     return (
       <div>
         <h4>Loading ....</h4>
@@ -80,8 +106,18 @@ export const AuthProvider = (props: { children: ReactNode }) => {
     );
   }
   return (
-    <AuthContext.Provider value={{ logout, login, user: data?.user }}>
-      {props.children}
+    <AuthContext.Provider
+      value={{
+        logout,
+        login,
+        isAuthenticated: isTokenValid,
+        user: loginData?.data || data?.data || null,
+        isLoginLoading,
+        isLoadingUser,
+        isloadingPending,
+      }}
+    >
+      {children}
     </AuthContext.Provider>
   );
 };
@@ -92,4 +128,23 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
+};
+
+export const ProtectRoute = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
+  const { isAuthenticated, logout, isLoadingUser, isloadingPending } =
+    useAuth();
+
+  useEffect(() => {
+    if (
+      !isloadingPending &&
+      !isLoadingUser &&
+      !isAuthenticated &&
+      !router.pathname.startsWith("/auth")
+    ) {
+      logout();
+    }
+  }, [router.pathname, isAuthenticated]);
+
+  return <>{children}</>;
 };

@@ -8,10 +8,14 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import { MainSideBar } from "./components";
+import { useAuth } from "@/common/context";
+import { Button } from "@mui/material";
+import Link from "next/link";
 
 const drawerWidth = 240;
 
 function MainLayout({ children }: { children: ReactNode }) {
+  const { logout } = useAuth();
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -52,6 +56,10 @@ function MainLayout({ children }: { children: ReactNode }) {
             <Typography variant="h6" noWrap component="div" color="primary">
               Toolbar
             </Typography>
+            <Button variant="outlined" onClick={logout}>
+              Logout
+            </Button>
+            <Link href={"/auth/register"}>Register</Link>
           </Toolbar>
         </AppBar>
         <Toolbar />

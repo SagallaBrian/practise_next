@@ -22,16 +22,29 @@ export interface UserSignUpRsq {
 
 export interface UserSignInResp {
   status: string;
+  token: string;
   data: {
     avatar: string;
     email: string;
     name: string;
     phone_number: string;
     role: number;
-    token: string;
   };
 }
 export interface UserSignInRsq {
   email: string;
   password: string;
+}
+
+export interface UserType {
+  avatar: string;
+  email: string;
+  name: string;
+  phone_number: string;
+  role: number;
+  language?: string;
+  otp?: number;
+  resetPasswordToken?: string;
+  updatedAt?: string;
+  createdAt?: string;
 }

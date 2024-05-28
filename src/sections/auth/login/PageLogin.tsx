@@ -21,10 +21,10 @@ function PageLogin() {
     },
   });
 
-  const { mutate: login } = useLoginUser();
+  const { login, isLoginLoading } = useAuth();
 
   const onSubmitFunc = (formData: userForm) => {
-    login(formData);
+    login(formData.email, formData.password);
   };
 
   return (
@@ -77,9 +77,10 @@ function PageLogin() {
       </div>
       <button
         type="submit"
+        disabled={isLoginLoading}
         className="block w-full p-2 bg-indigo-500 text-white shadow-sm hover:bg-indigo-500 rounded-md"
       >
-        {true ? "Loading" : "Sign In"}
+        {isLoginLoading ? "Loading" : "Sign In"}
       </button>
     </form>
   );

@@ -1,21 +1,21 @@
 import { Inter, Roboto } from "next/font/google";
 import { ReactNode } from "react";
-import { useAuth } from "@/common/context/authcontext";
 import { AuthLayout, MainLayout } from "@/common/layout";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({
   subsets: ["latin"],
 });
 
 function AppLayout({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const pathname = usePathname();
 
   return (
     <div className={`${inter.className} h-screen container-fluid`}>
-      {user && user.email ? (
-        <MainLayout>{children}</MainLayout>
-      ) : (
+      {pathname.startsWith("/auth") ? (
         <AuthLayout>{children}</AuthLayout>
+      ) : (
+        <MainLayout>{children}</MainLayout>
       )}
     </div>
   );

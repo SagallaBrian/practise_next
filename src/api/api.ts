@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import axios, { CreateAxiosDefaults } from "axios";
+import Router from "next/router";
 
 const DEFAULT_API_CONFIG: CreateAxiosDefaults = {
   baseURL: process.env.API_BASE_URL,
@@ -35,7 +36,7 @@ axiosInstance.interceptors.response.use(
       (err.response && err.response.status === 401) ||
       err.response.status === 403
     ) {
-      console.log("Perform a redirect here");
+      Router.replace(`/auth/login?returnUrl=${Router.asPath}`);
     }
     return Promise.reject(err);
   }
