@@ -36,7 +36,9 @@ axiosInstance.interceptors.response.use(
       (err.response && err.response.status === 401) ||
       err.response.status === 403
     ) {
-      Router.replace(`/auth/login?returnUrl=${Router.asPath}`);
+      if (!Router.pathname.startsWith("/auth")) {
+        Router.replace(`/auth/login?returnUrl=${Router.asPath}`);
+      }
     }
     return Promise.reject(err);
   }

@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token") || "";
+    const token = localStorage.getItem("token") || '';
     const decodedJwt = parseJwt(token || "");
     const isTokenValid = !!decodedJwt && decodedJwt?.exp * 1000 > Date.now();
     setIsTokenValid(isTokenValid);
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(null);
       router.replace("/auth/login");
     }
-  }, []);
+  }, [router]);
 
   const {
     data,
