@@ -122,27 +122,26 @@ function PlatformPage() {
           error={formiks.touched.username && Boolean(formiks.errors.username)}
           helperText={formiks.touched.username && formiks.errors.username}
         />
-        <div className="mt-4">
-          <FormControl
-            variant="outlined"
-            fullWidth
-            error={formiks.touched.email && Boolean(formiks.errors.email)}
-          >
-            <InputLabel htmlFor="my-input-email">Email address</InputLabel>
-            <Input
-              id="my-input-email"
-              name="email"
-              value={formiks.values.email}
-              onChange={formiks.handleChange}
-              onBlur={formiks.handleBlur}
-            />
-            <FormHelperText>
-              {formiks.touched.email && formiks.errors.email
-                ? formiks.errors.email
-                : " Well never share your email."}
-            </FormHelperText>
-          </FormControl>
-        </div>
+        <FormControl
+          variant="outlined"
+          fullWidth
+          sx={{ mt: 4 }}
+          error={formiks.touched.email && Boolean(formiks.errors.email)}
+        >
+          <InputLabel htmlFor="my-input-email">Email address</InputLabel>
+          <Input
+            id="my-input-email"
+            name="email"
+            value={formiks.values.email}
+            onChange={formiks.handleChange}
+            onBlur={formiks.handleBlur}
+          />
+          <FormHelperText>
+            {formiks.touched.email && formiks.errors.email
+              ? formiks.errors.email
+              : " Well never share your email."}
+          </FormHelperText>
+        </FormControl>
 
         <div className="pt-3">
           <LocalizationProvider dateAdapter={AdapterDayjs}>

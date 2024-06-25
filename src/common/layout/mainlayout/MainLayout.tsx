@@ -9,13 +9,17 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import { MainSideBar } from "./components";
 import { useAuth } from "@/common/context";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import Link from "next/link";
+import { useCustomTheme } from "@/common/context/themecontext/ThemeContext";
+import LightMode from "@mui/icons-material/LightMode";
+import DarkMode from "@mui/icons-material/DarkMode";
 
 const drawerWidth = 240;
 
 function MainLayout({ children }: { children: ReactNode }) {
   const { logout } = useAuth();
+  const { mode, toggleMode } = useCustomTheme();
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -48,14 +52,19 @@ function MainLayout({ children }: { children: ReactNode }) {
           position="fixed"
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1,
-            backgroundColor: "white",
+            // backgroundColor: "white",
           }}
           elevation={1}
+          color="transparent"
         >
           <Toolbar>
             <Typography variant="h6" noWrap component="div" color="primary">
               Toolbar
             </Typography>
+            <IconButton onClick={toggleMode}>
+              {mode === "light" ? <LightMode /> : <DarkMode />}
+            </IconButton>
+
             <Button variant="outlined" onClick={logout}>
               Logout
             </Button>
